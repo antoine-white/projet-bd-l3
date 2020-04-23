@@ -14,6 +14,30 @@ CREATE OR REPLACE EDITIONABLE SYNONYM  "V$SESSION" FOR "LIVESQL"."ORACLE_SQL_USE
 /
 CREATE OR REPLACE EDITIONABLE SYNONYM  "V$SQL_PLAN_STATISTICS_ALL" FOR "LIVESQL"."ORACLE_SQL_USER_V$SQL_PLAN_S_A"
 /
+
+CREATE OR REPLACE EDITIONABLE TYPE  "MULTIMEDIA" AS OBJECT (  
+ id           NUMBER,  
+ title           VARCHAR2(30),  
+ theme          VARCHAR2(20),  
+ editor          NUMBER, -- reference editor TABLE2  
+ MEMBER FUNCTION show RETURN VARCHAR2,  
+ MEMBER FUNCTION typeDoc RETURN VARCHAR2  
+)  
+ NOT FINAL;
+/
+CREATE OR REPLACE EDITIONABLE TYPE BODY  "MULTIMEDIA" AS  
+ MEMBER FUNCTION typeDoc RETURN VARCHAR2 IS  
+ BEGIN  
+   RETURN '';  
+ END;  
+-- function that can be overriden by subtypes  
+ MEMBER FUNCTION show RETURN VARCHAR2 IS  
+ BEGIN  
+   RETURN 'Id: ' || TO_CHAR(id) || ', title: ' || title || ', theme : ' || theme || ', editor : ' || editor;  
+ END;  
+   
+END;
+/
 CREATE OR REPLACE EDITIONABLE TYPE  "CD" UNDER multimedia (   
     duree NUMBER,    
     nb_sous_titre NUMBER,  
@@ -72,29 +96,6 @@ CREATE OR REPLACE EDITIONABLE TYPE BODY  "LIVRE" AS
 END;
 /
 
-CREATE OR REPLACE EDITIONABLE TYPE  "MULTIMEDIA" AS OBJECT (  
- id           NUMBER,  
- title           VARCHAR2(30),  
- theme          VARCHAR2(20),  
- editor          NUMBER, -- reference editor TABLE2  
- MEMBER FUNCTION show RETURN VARCHAR2,  
- MEMBER FUNCTION typeDoc RETURN VARCHAR2  
-)  
- NOT FINAL;
-/
-CREATE OR REPLACE EDITIONABLE TYPE BODY  "MULTIMEDIA" AS  
- MEMBER FUNCTION typeDoc RETURN VARCHAR2 IS  
- BEGIN  
-   RETURN '';  
- END;  
--- function that can be overriden by subtypes  
- MEMBER FUNCTION show RETURN VARCHAR2 IS  
- BEGIN  
-   RETURN 'Id: ' || TO_CHAR(id) || ', title: ' || title || ', theme : ' || theme || ', editor : ' || editor;  
- END;  
-   
-END;
-/
 
 CREATE OR REPLACE EDITIONABLE TYPE  "VIDEO" UNDER multimedia (   
     duree NUMBER,   
@@ -119,3 +120,49 @@ CREATE TABLE DOCUMENTS of multimedia;
 ALTER TABLE DOCUMENTS 
 ADD CONSTRAINT constraint_id PRIMARY KEY (id);
 /
+ALTER TABLE DOCUMENTS  
+ADD FOREIGN KEY (editor) 
+REFERENCES EDITEURS(ID)
+/
+CREATE TABLE AUTEURS(
+ID NUMBER NOT NULL PRIMARY KEY,
+nom varchar2(20),
+prenom varchar2(20),
+date_naissance timestamp
+);
+/
+CREATE TABLE AUTEURS_DOCUMENTS(
+auteur_id NUMBER NOT NULL,
+document_id NUMBER NOT NULL,
+PRIMARY KEY (auteur_id,document_id),
+FOREIGN KEY (auteur_id) references AUTEURS(ID),
+FOREIGN KEY (document_id) references DOCUMENTS(ID)
+);
+/
+CREATE TABLE DOCUMENTS_MEDIATHEQUE(
+ID NUMBER NOT NULL PRIMARY KEY,
+nb_total NUMBER NOT NULL,
+nb_emprunte NUMBER NOT NULL,
+rayon varchar2(40) NOT NULL,
+document_id NUMBER NOT NULL,
+FOREIGN KEY (document_id) references DOCUMENTS(ID)
+);
+/
+CREATE TABLE EMPRUNTEURS(
+ID NUMBER NOT NULL PRIMARY KEY,
+nom varchar2(20) NOT NULL ,
+prenom varchar2(20) NOT NULL ,
+adresse VARCHAR2(100) NOT NULL , 
+telephone VARCHAR2(20) NOT NULL,
+categorie VARCHAR2(10) CHECK( categorie IN ('personnel', 'professionel', 'public'))
+);
+/
+CREATE TABLE EMPRUNTS(
+ID NUMBER NOT NULL PRIMARY KEY,
+debut timestamp NOT NULL,
+fin timestamp NOT NULL,
+emprunteur_id NUMBER NOT NULL,
+document_media_id NUMBER NOT NULL,
+FOREIGN KEY (document_media_id) references DOCUMENTS_MEDIATHEQUE(ID),
+FOREIGN KEY (emprunteur_id) references EMPRUNTEURS(ID)
+);
