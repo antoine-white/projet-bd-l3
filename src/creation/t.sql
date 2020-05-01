@@ -154,7 +154,7 @@ nom varchar2(20) NOT NULL ,
 prenom varchar2(20) NOT NULL ,
 adresse VARCHAR2(100) NOT NULL , 
 telephone VARCHAR2(20) NOT NULL,
-categorie VARCHAR2(10) CHECK( categorie IN ('personnel', 'professionel', 'public'))
+categorie VARCHAR2(20) CHECK( categorie IN ('personnel', 'professionel', 'public'))
 );
 /
 CREATE TABLE EMPRUNTS(
