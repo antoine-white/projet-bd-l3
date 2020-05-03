@@ -28,13 +28,13 @@ CREATE OR REPLACE EDITIONABLE TYPE  "MULTIMEDIA" AS OBJECT (
 CREATE OR REPLACE EDITIONABLE TYPE BODY  "MULTIMEDIA" AS  
  MEMBER FUNCTION typeDoc RETURN VARCHAR2 IS  
  BEGIN  
-   RETURN '';  
- END;  
+   RETURN ' ' 
+ END
 -- function that can be overriden by subtypes  
  MEMBER FUNCTION show RETURN VARCHAR2 IS  
  BEGIN  
-   RETURN 'Id: ' || TO_CHAR(id) || ', title: ' || title || ', theme : ' || theme || ', editor : ' || editor;  
- END;  
+   RETURN 'Id: ' || TO_CHAR(id) || ', title: ' || title || ', theme : ' || theme || ', editor : ' || editor 
+ END
    
 END;
 /
@@ -48,12 +48,12 @@ CREATE OR REPLACE EDITIONABLE TYPE  "CD" UNDER multimedia (
 CREATE OR REPLACE EDITIONABLE TYPE BODY  "CD" AS    
  OVERRIDING  MEMBER FUNCTION typeDoc RETURN VARCHAR2 IS    
  BEGIN    
-   RETURN 'CD';    
- END;    
+   RETURN 'CD' 
+ END
  OVERRIDING MEMBER FUNCTION show RETURN VARCHAR2 IS    
  BEGIN    
-   RETURN (SELF AS multimedia).show || ', duree : ' || TO_CHAR(duree) || ', nombre de sous titres : ' || TO_CHAR(nb_sous_titre) ;  
- END;    
+   RETURN (SELF AS multimedia).show || ', duree : ' || TO_CHAR(duree) || ', nombre de sous titres : ' || TO_CHAR(nb_sous_titre)  
+ END  
      
 END;
 /
@@ -67,12 +67,12 @@ CREATE OR REPLACE EDITIONABLE TYPE  "DVD" UNDER multimedia (
 CREATE OR REPLACE EDITIONABLE TYPE BODY  "DVD" AS    
  OVERRIDING  MEMBER FUNCTION typeDoc RETURN VARCHAR2 IS    
  BEGIN    
-   RETURN 'DVD';    
- END;    
+   RETURN 'DVD'
+ END    
  OVERRIDING MEMBER FUNCTION show RETURN VARCHAR2 IS    
  BEGIN    
-   RETURN (SELF AS multimedia).show || ', duree : ' || TO_CHAR(duree) ;  
- END;    
+   RETURN (SELF AS multimedia).show || ', duree : ' || TO_CHAR(duree)  
+ END  
      
 END;  
 /
@@ -86,12 +86,12 @@ CREATE OR REPLACE EDITIONABLE TYPE  "LIVRE" UNDER multimedia (
 CREATE OR REPLACE EDITIONABLE TYPE BODY  "LIVRE" AS    
  OVERRIDING  MEMBER FUNCTION typeDoc RETURN VARCHAR2 IS    
  BEGIN    
-   RETURN 'Livre';    
- END;    
+   RETURN 'Livre'
+ END  
  OVERRIDING MEMBER FUNCTION show RETURN VARCHAR2 IS    
  BEGIN    
-   RETURN (SELF AS multimedia).show || ', nombre de page : ' || TO_CHAR(nb_page);    
- END;    
+   RETURN (SELF AS multimedia).show || ', nombre de page : ' || TO_CHAR(nb_page)    
+ END    
      
 END;
 /
@@ -107,12 +107,12 @@ CREATE OR REPLACE EDITIONABLE TYPE  "VIDEO" UNDER multimedia (
 CREATE OR REPLACE EDITIONABLE TYPE BODY  "VIDEO" AS    
  OVERRIDING  MEMBER FUNCTION typeDoc RETURN VARCHAR2 IS    
  BEGIN    
-   RETURN 'VIDEO';    
- END;    
+   RETURN 'VIDEO'
+ END  
  OVERRIDING MEMBER FUNCTION show RETURN VARCHAR2 IS    
  BEGIN    
-   RETURN (SELF AS multimedia).show || ', duree : ' || TO_CHAR(duree) || ', format d enregistrement : ' || format_enreg  ;  
- END;    
+   RETURN (SELF AS multimedia).show || ', duree : ' || TO_CHAR(duree) || ', format d enregistrement : ' || format_enreg  
+ END    
      
 END;
 /
@@ -268,13 +268,13 @@ INSERT INTO DOCUMENTS
 VALUES (livre(1,'SQL avancé','informatique',1,1000))
 /
 INSERT INTO DOCUMENTS
-VALUES (livre(2,'géométrie','mathématiques',0,50))
+VALUES (livre(2,'Géométrie','mathématiques',0,50))
 /
 INSERT INTO DOCUMENTS
-VALUES (livre(3,'géométrie avancée','mathématiques',0,500))
+VALUES (livre(3,'Géométrie avancée','mathématiques',0,500))
 /
 INSERT INTO DOCUMENTS
-VALUES (livre(4,'algo simple','informatique',0,80))
+VALUES (livre(4,'Algo simple','informatique',0,80))
 /
 INSERT INTO DOCUMENTS
 VALUES (cd(5,'chanson bien','chanson',2,130,1))
